@@ -31,17 +31,8 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero section */}
-      <div className="relative bg-gray-900 overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="bg-black opacity-60 absolute inset-0 z-10"></div>
-          <img
-            src="https://image.tmdb.org/t/p/original/rzdPqYx7Um4FUZeD8wpXqjAYEx.jpg"
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-20 py-24 sm:py-32">
+      <div className="relative bg-black">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-50 py-24 sm:py-32">
           <div className="text-center">
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
               Discover your next favorite movie
@@ -49,7 +40,7 @@ const Home = () => {
             <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-300">
               Get personalized recommendations based on movies you love
             </p>
-            <div className="mt-10 max-w-xl mx-auto">
+            <div className="mt-10 max-w-xl mx-auto relative z-50">
               <AutocompleteSearch />
             </div>
           </div>
@@ -67,7 +58,7 @@ const Home = () => {
       </div>
 
       {/* Feature blocks */}
-      <div className="bg-gray-900 py-12">
+      <div className="relative bg-black py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center mb-12">
             <h2 className="text-base text-blue-500 font-semibold tracking-wide uppercase">Features</h2>
@@ -81,7 +72,7 @@ const Home = () => {
 
           <div className="mt-10">
             <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="bg-gray-800 p-6 rounded-lg">
+              <div className="relative bg-black p-6 rounded-lg">
                 <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -93,7 +84,7 @@ const Home = () => {
                 </p>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg">
+              <div className="relative bg-black p-6 rounded-lg">
                 <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -105,7 +96,7 @@ const Home = () => {
                 </p>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg">
+              <div className="relative bg-black p-6 rounded-lg">
                 <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />

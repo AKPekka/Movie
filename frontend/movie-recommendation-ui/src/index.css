@@ -9,6 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
 }
 
 code {
@@ -53,33 +54,13 @@ code {
   overflow: hidden;
 }
 
-/* Image fallback styles */
-img[src="/placeholder-poster.png"] {
-  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+/* High z-index for search suggestions to appear above everything */
+.search-suggestions {
+  z-index: 99999 !important;
+}
+
+/* Ensure search container has proper z-index */
+.search-container {
+  z-index: 10000;
   position: relative;
-}
-
-img[src="/placeholder-poster.png"]::before {
-  content: "🎬";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  color: #6b7280;
-}
-
-img[src="/placeholder-person.png"] {
-  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
-  position: relative;
-}
-
-img[src="/placeholder-person.png"]::before {
-  content: "👤";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.5rem;
-  color: #6b7280;
 } 

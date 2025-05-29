@@ -59,12 +59,12 @@ const AutocompleteSearch = () => {
   };
 
   return (
-    <div className="relative w-full max-w-xl" ref={searchRef}>
+    <div className="relative w-full max-w-xl search-container" ref={searchRef}>
       <form onSubmit={handleSearch} className="w-full">
         <div className="relative">
           <input
             type="text"
-            className="w-full py-3 px-4 pr-12 rounded-full bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full py-3 px-4 pr-12 rounded-full bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent relative z-10"
             placeholder="Search for movies..."
             value={query}
             onChange={(e) => {
@@ -75,7 +75,7 @@ const AutocompleteSearch = () => {
           />
           <button
             type="submit"
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white z-20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -85,7 +85,7 @@ const AutocompleteSearch = () => {
       </form>
 
       {showSuggestions && (query.length >= 2) && (
-        <div className="absolute z-10 w-full mt-1 bg-gray-900 border border-gray-700 rounded-md shadow-lg max-h-96 overflow-y-auto">
+        <div className="absolute w-full mt-1 bg-gray-900 border border-gray-700 rounded-md shadow-lg max-h-96 overflow-y-auto search-suggestions">
           {isLoading ? (
             <div className="p-4 text-center text-gray-400">Loading suggestions...</div>
           ) : suggestions.length > 0 ? (
@@ -101,10 +101,13 @@ const AutocompleteSearch = () => {
                       src={movie.poster_url}
                       alt={movie.title}
                       className="w-10 h-15 rounded-sm object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
                     />
                   ) : (
                     <div className="w-10 h-15 bg-gray-700 rounded-sm flex items-center justify-center">
-                      <span className="text-xs text-gray-400">No image</span>
+                      <span className="text-xs text-gray-400">🎬</span>
                     </div>
                   )}
                   <div>

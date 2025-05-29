@@ -85,14 +85,12 @@ const MoviePage = () => {
     ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
     : null;
 
-  const posterUrl = movie.poster_url || '/placeholder-poster.png';
-
   return (
     <div className="min-h-screen">
       {/* Backdrop */}
       {backdropUrl && (
         <div className="relative h-96 overflow-hidden">
-          <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
+          <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
           <img
             src={backdropUrl}
             alt={movie.title}
@@ -104,17 +102,23 @@ const MoviePage = () => {
       {/* Movie details */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`${backdropUrl ? '-mt-32 relative z-20' : 'pt-8'} pb-16`}>
-          <div className="bg-gray-900 rounded-lg shadow-xl overflow-hidden">
+          <div className="relative bg-black rounded-lg shadow-xl overflow-hidden">
             <div className="md:flex">
               <div className="md:flex-shrink-0">
-                <img
-                  className="h-full w-full object-cover md:w-64"
-                  src={posterUrl}
-                  alt={movie.title}
-                  onError={(e) => {
-                    e.target.src = '/placeholder-poster.png';
-                  }}
-                />
+                {movie.poster_url ? (
+                  <img
+                    className="h-full w-full object-cover md:w-64"
+                    src={movie.poster_url}
+                    alt={movie.title}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div className="h-96 w-full md:w-64 bg-black flex items-center justify-center">
+                    <span className="text-8xl text-gray-600">🎬</span>
+                  </div>
+                )}
               </div>
               <div className="p-8">
                 <div className="flex items-center">
@@ -201,17 +205,20 @@ const MoviePage = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {movie.credits.cast.slice(0, 12).map(person => (
                 <div key={person.id} className="text-center">
-                  <img
-                    src={person.profile_path
-                      ? `https://image.tmdb.org/t/p/w185${person.profile_path}`
-                      : '/placeholder-person.png'
-                    }
-                    alt={person.name}
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                    onError={(e) => {
-                      e.target.src = '/placeholder-person.png';
-                    }}
-                  />
+                  {person.profile_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
+                      alt={person.name}
+                      className="w-full h-32 object-cover rounded-lg mb-2"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-32 bg-black rounded-lg mb-2 flex items-center justify-center">
+                      <span className="text-2xl text-gray-600">👤</span>
+                    </div>
+                  )}
                   <h3 className="text-white text-sm font-medium">{person.name}</h3>
                   <p className="text-gray-400 text-xs">{person.character}</p>
                 </div>

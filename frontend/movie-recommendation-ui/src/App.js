@@ -9,7 +9,7 @@ import MoviePage from './pages/MoviePage';
 const App = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-900">
+      <div className="min-h-screen bg-black">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

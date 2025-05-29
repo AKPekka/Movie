@@ -3,23 +3,27 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const MovieCard = ({ movie }) => {
-  const posterUrl = movie.poster_url || '/placeholder-poster.png';
-
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className="group bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]"
+      className="group relative bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]"
     >
       <div className="relative pb-[150%]">
-        <img
-          src={posterUrl}
-          alt={movie.title}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-          onError={(e) => {
-            e.target.src = '/placeholder-poster.png';
-          }}
-        />
+        {movie.poster_url ? (
+          <img
+            src={movie.poster_url}
+            alt={movie.title}
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+        ) : (
+          <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center">
+            <span className="text-6xl text-gray-600">🎬</span>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="absolute bottom-0 left-0 right-0 p-4">
             {movie.vote_average > 0 && (
