@@ -1,18 +1,20 @@
 # nixpacks.toml
-# 1. Turn off automatic detect of a single language
+# Don’t try to auto-detect a single language
 skip_detect = true
 
-# 2. Install phase: pip in backend, npm in frontend
-[[phases.install.commands]]
-"pip install -r backend/requirements.txt"
+# Install both back- and front-end dependencies
+[phases.install]
+cmds = [
+  "pip install -r backend/requirements.txt",
+  "npm install --prefix frontend/movie-recommendation-ui"
+]
 
-[[phases.install.commands]]
-"npm install --prefix frontend/movie-recommendation-ui"
+# Build the React app
+[phases.build]
+cmds = [
+  "npm run build --prefix frontend/movie-recommendation-ui"
+]
 
-# 3. Build phase: compile your React app
-[[phases.build.commands]]
-"npm run build --prefix frontend/movie-recommendation-ui"
-
-# 4. Start phase: run gunicorn on your Flask app on the dyno port
-[[phases.start.commands]]
-"gunicorn -b 0.0.0.0:${PORT} backend.app:app"
+# Start your Flask API on the port Nixpacks provides
+[start]
+cmd = "gunicorn -b 0.0.0.0:${PORT} backend.app:app"
