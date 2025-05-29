@@ -1,4 +1,4 @@
-# MovieMind - AI-Powered Movie Recommendation App
+# MovieMind - Movie Recommendation App
 
 A full-stack movie recommendation application that helps users discover new movies based on their preferences using content-based and hybrid recommendation algorithms.
 
