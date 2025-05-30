@@ -1,5 +1,6 @@
 // src/services/api.js
-const API_BASE_URL = 'http://localhost:5002/api';
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE || 'http://localhost:5002/api';
 
 export const searchMovies = async (query, page = 1) => {
   const response = await fetch(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}&page=${page}`);
