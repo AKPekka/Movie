@@ -32,15 +32,19 @@ def health_check():
 
 @app.route('/api/search', methods=['GET'])
 def search_movies():
-    """Search for movies by title."""
+    """Search for movies by title or movies by person."""
     query = request.args.get('query', '')
     page = request.args.get('page', 1, type=int)
+    search_type = request.args.get('search_type', 'movie') # Default to movie search
 
     if not query:
         return jsonify({'error': 'Query parameter is required'}), 400
 
     try:
-        results = tmdb_service.search_movies(query, page)
+        if search_type == 'person':
+            results = tmdb_service.search_person_movies(query, page)
+        else: # Default to movie search
+            results = tmdb_service.search_movies(query, page)
         return jsonify(results)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -65,6 +69,15 @@ def get_movie(movie_id):
     try:
         movie = tmdb_service.get_movie_details(movie_id)
         return jsonify(movie)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/movie/<int:movie_id>/watch_providers', methods=['GET'])
+def get_movie_watch_providers_route(movie_id):
+    """Get watch providers for a movie."""
+    try:
+        providers = tmdb_service.get_movie_watch_providers(movie_id)
+        return jsonify(providers)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

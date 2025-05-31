@@ -1,7 +1,7 @@
 // src/pages/MoviePage.jsx
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getMovieDetails, getRecommendations } from '../services/api';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { getMovieDetails, getRecommendations, getMovieWatchProviders } from '../services/api';
 import MovieGrid from '../components/MovieGrid';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
@@ -14,6 +14,8 @@ const MoviePage = () => {
   const [isLoadingRecs, setIsLoadingRecs] = useState(true);
   const [error, setError] = useState(null);
   const [recError, setRecError] = useState(null);
+  const [watchProviders, setWatchProviders] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -47,9 +49,24 @@ const MoviePage = () => {
       }
     };
 
+    const fetchWatchProviders = async () => {
+      try {
+        const data = await getMovieWatchProviders(id);
+        if (data.results && data.results.US && data.results.US.flatrate) {
+          setWatchProviders(data.results.US.flatrate);
+        } else {
+          setWatchProviders([]);
+        }
+      } catch (err) {
+        console.error('Failed to load watch providers:', err);
+        setWatchProviders([]);
+      }
+    };
+
     if (id) {
       fetchMovieDetails();
       fetchRecommendations();
+      fetchWatchProviders();
     }
 
     return () => {
@@ -173,6 +190,23 @@ const MoviePage = () => {
                   </div>
                 )}
 
+                {watchProviders && watchProviders.length > 0 && (
+                  <div className="mt-6">
+                    <h3 className="text-lg font-medium text-white mb-2">Available on</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {watchProviders.slice(0, 5).map(provider => (
+                        <img
+                          key={provider.provider_id}
+                          src={`https://image.tmdb.org/t/p/w92${provider.logo_path}`}
+                          alt={provider.provider_name}
+                          title={provider.provider_name}
+                          className="h-10 w-10 rounded-md object-contain"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {movie.credits && movie.credits.crew && (
                   <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                     {movie.credits.crew
@@ -181,7 +215,12 @@ const MoviePage = () => {
                       .map(person => (
                         <div key={person.id}>
                           <h4 className="text-sm text-gray-400">Director</h4>
-                          <p className="text-white">{person.name}</p>
+                          <p
+                            className="text-white cursor-pointer hover:underline"
+                            onClick={() => navigate(`/search?q=${encodeURIComponent(person.name)}&type=person`)}
+                          >
+                            {person.name}
+                          </p>
                         </div>
                       ))}
 
@@ -219,7 +258,12 @@ const MoviePage = () => {
                       <span className="text-2xl text-gray-600">👤</span>
                     </div>
                   )}
-                  <h3 className="text-white text-sm font-medium">{person.name}</h3>
+                  <h3
+                    className="text-white text-sm font-medium cursor-pointer hover:underline"
+                    onClick={() => navigate(`/search?q=${encodeURIComponent(person.name)}&type=person`)}
+                  >
+                    {person.name}
+                  </h3>
                   <p className="text-gray-400 text-xs">{person.character}</p>
                 </div>
               ))}

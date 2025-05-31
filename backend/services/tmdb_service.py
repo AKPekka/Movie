@@ -133,3 +133,68 @@ class TMDbService:
             })
 
         return {'results': simple_results}
+
+    @cached
+    def get_movie_watch_providers(self, movie_id):
+        """Get watch provider information for a movie."""
+        endpoint = f"movie/{movie_id}/watch/providers"
+        # The API returns results for all regions by default.
+        # We are primarily interested in US providers, which the frontend will filter.
+        return self._make_request(endpoint)
+
+    @cached
+    def search_person_movies(self, query, page=1):
+        """Search for movies by a person (actor/director)."""
+        # Step 1: Search for the person
+        person_search_endpoint = "search/person"
+        person_params = {
+            'query': query,
+            'page': page # Use page for person search as well, though we primarily want the first result
+        }
+        person_search_results = self._make_request(person_search_endpoint, person_params)
+
+        if not person_search_results or not person_search_results.get('results'):
+            return {'results': [], 'page': 1, 'total_pages': 0, 'total_results': 0} # TMDb like structure
+
+        # Assuming the first result is the correct person
+        person = person_search_results['results'][0]
+        person_id = person['id']
+
+        # Step 2: Get movie credits for that person
+        movie_credits_endpoint = f"person/{person_id}/movie_credits"
+        # The movie_credits endpoint for a person doesn't support pagination directly in the API call for combined credits.
+        # It returns all cast and crew roles. We will return this as a single "page".
+        movie_credits = self._make_request(movie_credits_endpoint)
+
+        # Combine cast and crew, and ensure unique movies (a person can be cast and crew in the same movie)
+        all_roles = movie_credits.get('cast', []) + movie_credits.get('crew', []) 
+        movies_map = {}
+        for role in all_roles:
+            # We need a consistent movie structure, similar to search_movies results
+            if role.get('id') not in movies_map:
+                movies_map[role['id']] = {
+                    'id': role.get('id'),
+                    'title': role.get('title') or role.get('name'), # Some might use 'name' for TV shows
+                    'poster_path': role.get('poster_path'),
+                    'release_date': role.get('release_date') or role.get('first_air_date'),
+                    'overview': role.get('overview'),
+                    'vote_average': role.get('vote_average'),
+                    'popularity': role.get('popularity'),
+                    # Add poster_url like in search_movies
+                    'poster_url': f"{self.image_base_url}{role['poster_path']}" if role.get('poster_path') else None,
+                    'job': role.get('job', None), # For crew
+                    'character': role.get('character', None) # For cast
+                }
+        
+        # Sort by popularity (descending) as a default sort order for person's movies
+        # The API returns cast and crew roles; they don't have a top-level 'popularity' like movies in a general search.
+        # We'll sort by the movie's own popularity field.
+        sorted_movies = sorted(list(movies_map.values()), key=lambda x: x.get('popularity', 0), reverse=True)
+
+        # Mimic the structure of search_movies response for consistency
+        return {
+            'results': sorted_movies,
+            'page': 1, # Person credits are not paginated in the same way
+            'total_pages': 1,
+            'total_results': len(sorted_movies)
+        }

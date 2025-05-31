@@ -8,6 +8,7 @@ const Search = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const query = searchParams.get('q') || '';
+  const searchType = searchParams.get('type') || 'movie';
   const isTrendingPage = location.pathname === '/trending';
 
   const [movies, setMovies] = useState([]);
@@ -26,7 +27,7 @@ const Search = () => {
         if (isTrendingPage) {
           data = await getTrendingMovies();
         } else if (query) {
-          data = await searchMovies(query, page);
+          data = await searchMovies(query, page, searchType);
         } else {
           setMovies([]);
           setIsLoading(false);
@@ -44,7 +45,7 @@ const Search = () => {
     };
 
     fetchMovies();
-  }, [query, page, isTrendingPage]);
+  }, [query, page, isTrendingPage, searchType]);
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -62,7 +63,10 @@ const Search = () => {
 
   const getPageTitle = () => {
     if (isTrendingPage) return 'Trending Movies';
-    if (query) return `Search results for "${query}"`;
+    if (query) {
+      if (searchType === 'person') return `Movies featuring "${query}"`;
+      return `Search results for "${query}"`;
+    }
     return 'Search movies';
   };
 
@@ -78,7 +82,7 @@ const Search = () => {
         error={error}
       />
 
-      {totalPages > 1 && !isTrendingPage && (
+      {totalPages > 1 && !isTrendingPage && searchType !== 'person' && (
         <div className="flex items-center justify-center space-x-4 mt-12">
           <button
             onClick={handlePrevPage}

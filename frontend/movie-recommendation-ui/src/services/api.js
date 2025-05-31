@@ -2,8 +2,8 @@
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE || 'http://localhost:5002/api';
 
-export const searchMovies = async (query, page = 1) => {
-  const response = await fetch(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}&page=${page}`);
+export const searchMovies = async (query, page = 1, searchType = 'movie') => {
+  const response = await fetch(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}&page=${page}&search_type=${searchType}`);
   if (!response.ok) throw new Error('Failed to search movies');
   return response.json();
 };
@@ -38,5 +38,11 @@ export const getHybridRecommendations = async (movieIds, limit = 10) => {
 export const getTrendingMovies = async (timeWindow = 'week') => {
   const response = await fetch(`${API_BASE_URL}/trending?time_window=${timeWindow}`);
   if (!response.ok) throw new Error('Failed to get trending movies');
+  return response.json();
+};
+
+export const getMovieWatchProviders = async (movieId) => {
+  const response = await fetch(`${API_BASE_URL}/movie/${movieId}/watch_providers`);
+  if (!response.ok) throw new Error('Failed to fetch watch providers');
   return response.json();
 };
