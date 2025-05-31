@@ -1,4 +1,6 @@
 # MovieMind - Movie Recommendation App
+Now live at: https://moviemind.up.railway.app/
+
 
 A full-stack movie recommendation application that helps users discover new movies based on their preferences using content-based and hybrid recommendation algorithms.
 
