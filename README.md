@@ -11,6 +11,7 @@ A full-stack movie recommendation application that helps users discover new movi
 - **Hybrid Recommendations**: Combine multiple movies you love for more accurate recommendations
 - **Trending Movies**: Stay up-to-date with the latest trending films
 - **Detailed Movie Information**: View comprehensive movie details including cast, crew, and ratings
+- **Availability on Streaming Services**: View movie availablity on popular streaming services
 - **Responsive Design**: Optimized for desktop and mobile devices
 
 ## Architecture
