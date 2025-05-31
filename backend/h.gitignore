@@ -23,7 +23,7 @@ var/
 *.egg
 
 # Environment variables
-.env
+h.env
 
 # OS specific
 .DS_Store
